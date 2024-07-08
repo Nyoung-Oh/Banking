@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="history.dao.AccountHistoryDAO">	
+
+
+	<!-- 계좌 이체 시 거래 내역 테이블에 삽입 -->
+	<insert id="insert" parameterType="accountHistoryVO">
+		INSERT INTO ACCOUNT_HISTORY (history_num, account_num, your_account_num, money, history_type)
+		values(sql_tbl_account_history_history_num.nextval, 
+       			#{account_num}, 
+       			#{your_account_num}, 
+                #{money},
+   		  	    #{history_type}
+		)
+	</insert>
+	
+	
+	<!-- 로그인한 id의 계좌 번호 중 거래 내역 조회(잔액 조회는 아래에서 함) -->
+	<select id="selectHistory" parameterType="accountVO" resultType="accountHistoryVO">
+		SELECT *
+  		  FROM ACCOUNT_HISTORY
+ 		 WHERE account_num = #{account_num}
+ 		 ORDER BY history_num desc
+	</select>
+	
+	
+    <!-- 로그인한 id의 계좌 번호 중 잔액 내역과 10개 단위로 조회한 것을 MAPPING -->	
+	<resultMap type="accountHistoryVO" id="accountHistoryMap">
+	<result column="balance" property="account.balance"/>
+	</resultMap>
+	
+	<!-- 거래 내역을 10개 단위로 조회 -->
+	<select id="selectBalancePage" parameterType="accountHistoryVO" resultMap="accountHistoryMap">
+        <!-- 4. 3번과 거래 이력 테이블의 계좌 번호가 같은 것 중 (입금 누적 합 -출금 누적 합 - 보낸 누적 합 + 받은 누적합)으로 잔액 조회 -->
+		SELECT ah.*
+	     	  ,(income_sum-outcome_sum-send_sum+receive_sum) AS balance
+		  FROM (
+	     	    <!-- 3. 입금, 출금, 받은 내역, 보낸 내역 누적 합 조회 (내역이 없으면 0) -->
+				SELECT history_num
+			       ,account_num
+			       ,your_account_num
+			       ,history_date
+			       ,income
+			       ,outcome
+			       ,send
+			       ,receive
+			       ,nvl(income_sum,0) AS income_sum
+			       ,nvl(outcome_sum,0) AS outcome_sum
+			       ,nvl(send_sum,0) AS send_sum
+			       ,nvl(receive_sum,0) AS receive_sum
+			
+			   	 FROM 
+					(
+					   <!-- 2. pivot 이용해 입금, 출금, 받은 내역, 보낸 내역을 컬럼으로 설정 (내역이 없으면 0) -->
+					   SELECT history_num,account_num,your_account_num,history_date
+					       ,nvl(income,0) AS income,nvl(outcome,0) AS outcome,nvl(send,0) AS send,nvl(receive,0) AS receive
+					       ,sum(income) OVER (ORDER BY history_num) AS income_sum
+						   ,sum(outcome) OVER (ORDER BY history_num) AS outcome_sum
+						   ,sum(send) OVER (ORDER BY history_num) AS send_sum
+						   ,sum(receive) OVER (ORDER BY history_num) AS receive_sum
+						FROM (
+								SELECT * FROM (
+										  		<!-- 1. 로그인한 id의 계좌 번호 중 id가 보낸 내역과 받은 내역을 중복 제거하여 조회  -->
+												SELECT HISTORY_NUM ,ACCOUNT_NUM ,YOUR_ACCOUNT_NUM ,money ,HISTORY_DATE , HISTORY_TYPE 
+												FROM ACCOUNT_HISTORY ah 
+												WHERE ACCOUNT_NUM = #{account_num}
+										
+												UNION 
+												SELECT HISTORY_NUM ,ACCOUNT_NUM ,YOUR_ACCOUNT_NUM ,MONEY ,HISTORY_DATE , '4' AS HISTORY_TYPE 
+												FROM ACCOUNT_HISTORY ah 
+												WHERE YOUR_ACCOUNT_NUM = #{account_num} AND ACCOUNT_NUM != YOUR_ACCOUNT_NUM
+										
+												)
+						pivot ( sum(money) FOR history_type IN (1 AS income,2 AS outcome,3 AS send, 4 AS receive))
+						ORDER BY history_num asc
+						   	 )
+	
+				    )
+				) t1, account_history ah
+		WHERE ah.history_num = t1.history_num
+	    ORDER BY ah.history_num desc
+	   OFFSET (#{page}-1)*10 ROWS FETCH NEXT 10 ROWS ONLY
+	</select>
+	
+		
+	<!-- 거내 내역의 잔액 조회 -->
+	<select id="selectBalance" parameterType="accountHistoryVO" resultMap="accountHistoryMap">
+ 		<!-- 4. 3번과 거래 이력 테이블의 계좌 번호가 같은 것 중 (입금 누적 합 -출금 누적 합 - 보낸 누적 합 + 받은 누적합)으로 잔액 조회 -->
+	SELECT ah.*
+     	  ,(income_sum-outcome_sum-send_sum+receive_sum) AS balance
+	  FROM (
+      		<!-- 3. 입금, 출금, 받은 내역, 보낸 내역 누적 합 조회 (내역이 없으면 0) -->
+			SELECT history_num
+		       ,account_num
+		       ,your_account_num
+		       ,history_date
+		       ,income
+		       ,outcome
+		       ,send
+		       ,receive
+		       ,nvl(income_sum,0) AS income_sum
+		       ,nvl(outcome_sum,0) AS outcome_sum
+		       ,nvl(send_sum,0) AS send_sum
+		       ,nvl(receive_sum,0) AS receive_sum
+		
+		   	 FROM 
+				(
+			 		<!-- 2. pivot 이용해 입금, 출금, 받은 내역, 보낸 내역을 컬럼으로 설정 (내역이 없으면 0) -->
+				   SELECT history_num,account_num,your_account_num,history_date
+				       ,nvl(income,0) AS income,nvl(outcome,0) AS outcome,nvl(send,0) AS send,nvl(receive,0) AS receive
+				       ,sum(income) OVER (ORDER BY history_num) AS income_sum
+					   ,sum(outcome) OVER (ORDER BY history_num) AS outcome_sum
+					   ,sum(send) OVER (ORDER BY history_num) AS send_sum
+					   ,sum(receive) OVER (ORDER BY history_num) AS receive_sum
+					FROM (
+							SELECT * FROM (
+									  <!-- 1. 로그인한 id의 계좌 번호 중 id가 보낸 내역과 받은 내역을 중복 제거하여 조회  -->
+											SELECT HISTORY_NUM ,ACCOUNT_NUM ,YOUR_ACCOUNT_NUM ,money ,HISTORY_DATE , HISTORY_TYPE 
+											FROM ACCOUNT_HISTORY ah 
+											WHERE ACCOUNT_NUM = #{account_num}
+									
+											UNION 
+											SELECT HISTORY_NUM ,ACCOUNT_NUM ,YOUR_ACCOUNT_NUM ,MONEY ,HISTORY_DATE , '4' AS HISTORY_TYPE 
+											FROM ACCOUNT_HISTORY ah 
+											WHERE YOUR_ACCOUNT_NUM = #{account_num} AND ACCOUNT_NUM != YOUR_ACCOUNT_NUM
+									
+											)
+					pivot ( sum(money) FOR history_type IN (1 AS income,2 AS outcome,3 AS send, 4 AS receive))
+					ORDER BY history_num asc
+					   	 )
+
+				    )
+				) t1, account_history ah
+		WHERE ah.history_num = t1.history_num
+	    ORDER BY ah.history_num desc
+	</select>
+	
+	<select id="count" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		  FROM account_history
+		 WHERE account_num = #{account_num}
+	</select>
+</mapper> 

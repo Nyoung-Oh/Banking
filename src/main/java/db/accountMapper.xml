@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="account.dao.AccountDAO">
+
+
+	<!-- 보낸 계좌의 잔액 업데이트 -->
+	<update id="updateBalance" parameterType="AccountVO">
+		update account
+	   	   set balance = #{balance}
+		 where account_num = #{account_num}
+	</update>
+	
+	
+	<!-- 받는 계좌의 잔액 업데이트 -->	
+	<update id="increaseBalance" parameterType="AccountVO">
+		update account
+		   set balance = balance + #{balance}
+		 where account_num = #{account_num}
+	</update>
+
+
+	<!-- 로그인 한 id의 계좌 정보 조회 -->	
+	<select id="selectAccount" parameterType="MemberVO" resultType="AccountVO">
+		SELECT *
+		  FROM ACCOUNT a 
+		 WHERE id = #{id}
+	</select>	
+	
+	
+	<!-- id의 계좌 중 하나의 계좌 잔액 조회 -->	
+	<select id="selectBalance" parameterType="AccountVO" resultType="AccountVO">
+		SELECT *
+		  FROM ACCOUNT a 
+		 WHERE account_num = #{account_num}
+	</select>	
+
+
+	<!-- 계좌 이체 시 입력한 비밀번호와 저장한 비밀번호 확인 -->
+	<select id="checkPwd" parameterType="AccountVO" resultType="AccountVO">
+		SELECT *
+		  FROM  ACCOUNT
+		 WHERE ACCOUNT_NUM = #{account_num} AND ACCOUNT_PWD = #{pwd}
+	</select>
+
+
+	<!-- 계좌 개설 -->	
+	<insert id="openAccount" parameterType="AccountVO">
+		insert into account(account_num, account_type, account_pwd, balance,id)
+		values (#{account_num}, #{account_type}, #{pwd}, #{balance},#{id})
+	</insert>
+	
+</mapper> 
