@@ -6,10 +6,10 @@
 	<properties resource="db/db.properties"></properties>
 
 	<typeAliases>
-		<typeAlias type="kr.ac.kopo.banking.vo.MemberVO" alias="MemberVO" />
-		<typeAlias type="kr.ac.kopo.banking.vo.AccountVO" alias="AccountVO" />
-		<typeAlias type="kr.ac.kopo.banking.vo.AccountTypeVO" alias="AccountTypeVO" />
-		<typeAlias type="kr.ac.kopo.banking.vo.AccountHistoryVO" alias="AccountHistoryVO" />
+		<typeAlias type="kr.ac.kopo.vo.MemberVO" alias="MemberVO" />
+		<typeAlias type="kr.ac.kopo.vo.AccountVO" alias="AccountVO" />
+		<typeAlias type="kr.ac.kopo.vo.AccountTypeVO" alias="AccountTypeVO" />
+		<typeAlias type="kr.ac.kopo.vo.AccountHistoryVO" alias="AccountHistoryVO" />
 	</typeAliases>
 
 

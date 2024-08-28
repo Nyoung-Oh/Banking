@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import kr.ac.kopo.banking.dao.AccountHistoryDAO;
-import kr.ac.kopo.banking.vo.AccountHistoryVO;
 import kr.ac.kopo.framework.PageUtil;
+import kr.ac.kopo.vo.AccountHistoryVO;
 
 /**
  * Servlet implementation class ViewHistory
@@ -65,7 +65,8 @@ public class ViewHistory extends HttpServlet {
 		historyVo.setAccount_num(account_num);
 		
 		// DAO에 있는 잔액 조회 메소드에 위 계좌 번호를 선택한 VO를 넘겨 거래 내역 배열을 리스트로 받아 변수명 historyList에 저장
-		List<AccountHistoryVO> historyList = historyDao.historyPage(historyVo);
+		//List<AccountHistoryVO> historyList = historyDao.historyPage(historyVo);
+		List<AccountHistoryVO> historyList = historyDao.getAllHistory(historyVo);
 		
 		Map<String,Object> result = new HashMap<String, Object>();
 		

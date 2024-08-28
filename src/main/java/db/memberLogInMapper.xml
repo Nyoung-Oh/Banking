@@ -7,7 +7,7 @@
 	<!-- 로그인 -->
 	<select id="logIn" parameterType="memberVO" resultType="memberVO">
 		select *
-		  from member
+		  from member_kom
 		 where id = #{id} and pwd = #{pwd}
 	</select>
 </mapper>

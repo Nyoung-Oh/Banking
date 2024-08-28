@@ -1,7 +1,10 @@
-package kr.ac.kopo.banking.vo;
+package kr.ac.kopo.vo;
 
-public class MemberVO {
+import java.io.Serializable;
 
+public class MemberVO implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String pwd;
 	private String name;

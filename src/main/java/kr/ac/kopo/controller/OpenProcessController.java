@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.ac.kopo.banking.dao.AccountDAO;
-import kr.ac.kopo.banking.vo.AccountVO;
-import kr.ac.kopo.banking.vo.MemberVO;
+import kr.ac.kopo.banking.dao.AccountHistoryDAO;
 import kr.ac.kopo.framework.Controller;
+import kr.ac.kopo.vo.AccountHistoryVO;
+import kr.ac.kopo.vo.AccountVO;
+import kr.ac.kopo.vo.MemberVO;
 
 public class OpenProcessController implements Controller{
 
@@ -42,13 +44,21 @@ public class OpenProcessController implements Controller{
 		long initialMoney = Long.parseLong(request.getParameter("initialMoney"));
 		
 		AccountVO accountVO = new AccountVO();
-		accountVO.setAccount_type(type);
+		accountVO.setAccount_type("001");
 		accountVO.setAccount_num(accNum);
-		accountVO.setPwd(pwd);
+		accountVO.setAccount_pwd(pwd);
 		accountVO.setBalance(initialMoney);
-		accountVO.setId(member.getId());
+		accountVO.setMember_id(member.getId());
 		AccountDAO accountDao = new AccountDAO();
 		accountDao.insert(accountVO);
+
+		AccountHistoryVO historyVO = new AccountHistoryVO();
+		historyVO.setAccount_num(accNum);
+		historyVO.setYour_account_num("최초 입금 금액");
+		historyVO.setMoney(initialMoney);
+		historyVO.setHistory_type("4");
+		AccountHistoryDAO historyDao = new AccountHistoryDAO();
+		historyDao.insert(historyVO);
 
 		return "/bingo/accountOpen.jsp";
 	}

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.ac.kopo.banking.dao.AccountDAO;
-import kr.ac.kopo.banking.vo.AccountVO;
+import kr.ac.kopo.vo.AccountVO;
 
 /**
  * Servlet implementation class ViewBalance

@@ -5,9 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.ac.kopo.banking.dao.AccountDAO;
 import kr.ac.kopo.banking.dao.AccountHistoryDAO;
-import kr.ac.kopo.banking.vo.AccountHistoryVO;
-import kr.ac.kopo.banking.vo.AccountVO;
 import kr.ac.kopo.framework.Controller;
+import kr.ac.kopo.vo.AccountHistoryVO;
+import kr.ac.kopo.vo.AccountVO;
 
 public class SendProcessController implements Controller{
 
@@ -23,7 +23,7 @@ public class SendProcessController implements Controller{
 		
 		AccountVO accountVO = new AccountVO();
 		accountVO.setAccount_num(accNum);
-		accountVO.setPwd(pwd);
+		accountVO.setAccount_pwd(pwd);
 		
 		// 비밀번호 확인
 		AccountVO getAccountVO = accountDAO.checkPwd(accountVO);
@@ -35,6 +35,17 @@ public class SendProcessController implements Controller{
 		//출금 계좌에 있는 돈보다 적은 돈인지 확인
 		if (getAccountVO.getBalance() < money) {
 			request.setAttribute("msg", "잔액이 부족합니다.");
+			return "/bingo/controlError.jsp";
+		}
+
+		
+		// 받는 사람 계좌 번호 확인
+		AccountVO yourAccountVO = new AccountVO();
+		yourAccountVO.setAccount_num(yourAccNum);
+		AccountVO getAccNumVO = accountDAO.checkAccNum(yourAccountVO);
+		
+		if (getAccNumVO == null) {
+			request.setAttribute("msg", "받는 분의 계좌 번호를 확인해주세요.");
 			return "/bingo/controlError.jsp";
 		}
 		
@@ -52,8 +63,15 @@ public class SendProcessController implements Controller{
 		accountHistoryVO.setYour_account_num(yourAccNum);
 		accountHistoryVO.setMoney(money);
 		accountHistoryVO.setHistory_type("3");
+		accountHistoryVO.setBalance(getAccountVO.getBalance());
 		
 		AccountHistoryDAO accountHistoryDao = new AccountHistoryDAO();
+		accountHistoryDao.insert(accountHistoryVO);
+		
+		accountHistoryVO.setAccount_num(yourAccNum);
+		accountHistoryVO.setYour_account_num(accNum);
+		accountHistoryVO.setBalance(yourAccountVO.getBalance()+money);
+		
 		accountHistoryDao.insert(accountHistoryVO);
 		
 		return "/bingo/sendForm.do";

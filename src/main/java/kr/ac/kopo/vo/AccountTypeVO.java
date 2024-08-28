@@ -1,4 +1,4 @@
-package kr.ac.kopo.banking.vo;
+package kr.ac.kopo.vo;
 
 public class AccountTypeVO {
 	

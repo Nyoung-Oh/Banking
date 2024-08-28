@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import kr.ac.kopo.banking.vo.AccountHistoryVO;
-import kr.ac.kopo.banking.vo.AccountVO;
+import kr.ac.kopo.vo.AccountHistoryVO;
+
 
 public class AccountHistoryDAO {
 
@@ -59,4 +59,9 @@ public class AccountHistoryDAO {
 	public List<AccountHistoryVO> historyPage(AccountHistoryVO historyVo) {
 		return session.selectList("history.dao.AccountHistoryDAO.selectBalancePage", historyVo);
 	}
+	
+	public List<AccountHistoryVO> getAllHistory(AccountHistoryVO historyVo) {
+		return session.selectList("history.dao.AccountHistoryDAO.selectListAccountHistory", historyVo);
+	}
+
 }

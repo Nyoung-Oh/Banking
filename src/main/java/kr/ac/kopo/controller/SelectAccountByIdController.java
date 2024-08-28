@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.ac.kopo.banking.dao.AccountDAO;
-import kr.ac.kopo.banking.vo.AccountVO;
-import kr.ac.kopo.banking.vo.MemberVO;
 import kr.ac.kopo.framework.Controller;
+import kr.ac.kopo.vo.AccountVO;
+import kr.ac.kopo.vo.MemberVO;
 
 public class SelectAccountByIdController implements Controller{
 

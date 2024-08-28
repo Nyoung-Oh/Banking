@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.ac.kopo.framework.Controller;
+import kr.ac.kopo.util.RedisUtil;
 
 public class LogOutController implements Controller{
 
@@ -14,6 +15,10 @@ public class LogOutController implements Controller{
 		HttpSession session = request.getSession();
 		
 		session.invalidate();
+		
+		RedisUtil redisUtil = new RedisUtil("172.31.9.182", 6379);
+		redisUtil.deleteKey("loginUser");
+		
 		return "/index.jsp";
 	}
 }

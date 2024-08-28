@@ -2,7 +2,7 @@ package kr.ac.kopo.banking.dao;
 
 import org.apache.ibatis.session.SqlSession;
 
-import kr.ac.kopo.banking.vo.MemberVO;
+import kr.ac.kopo.vo.MemberVO;
 
 public class MemberDAO {
 

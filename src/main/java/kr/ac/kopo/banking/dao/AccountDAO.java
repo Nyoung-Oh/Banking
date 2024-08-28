@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import kr.ac.kopo.banking.vo.AccountHistoryVO;
-import kr.ac.kopo.banking.vo.AccountVO;
-import kr.ac.kopo.banking.vo.MemberVO;
+import kr.ac.kopo.vo.AccountVO;
+import kr.ac.kopo.vo.MemberVO;
 
 public class AccountDAO {
 
@@ -59,6 +58,14 @@ public class AccountDAO {
 		return getAccountVO;
 	}
 
+	
+	// 계좌 이체 시 입력한 받는 사람의 계좌 번호 확인
+	public AccountVO checkAccNum(AccountVO accountVO) {
+		
+		AccountVO getAccNumVO = session.selectOne("account.dao.AccountDAO.checkAccNum", accountVO);
+		return getAccNumVO;
+	}
+	
 	
 	// 계좌 개설	
 	public void insert(AccountVO accountVO) {

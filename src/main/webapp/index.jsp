@@ -14,7 +14,7 @@
   
   <meta name="author" content="Themefisher.com">
 
-  <title>BINGO BANK</title>
+  <title>KOM BANK</title>
 
 <!-- Mobile Specific Meta
   ================================================== -->
@@ -88,9 +88,9 @@ Fixed Navigation
               Homepage
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="banking.do">빙고은행</a>
-              <a class="dropdown-item" href="404.jsp">성수증권</a>
-              <a class="dropdown-item" href="404.jsp">예찬카드</a>
+              <a class="dropdown-item" href="banking.do">KOM은행</a>
+              <a class="dropdown-item" href="http://172.31.9.174:8080/KOMcard/home.do">KOM카드</a>
+              <a class="dropdown-item" href="http://172.31.9.182:8080/Stock-System-WEB/getOneStock.do">KOM증권</a>
             </div>
           </li>
           <li class="nav-item ">
@@ -137,7 +137,7 @@ End Fixed Navigation
 			<div class="row">
 				<div class="col-md-12 text-center">
 					<h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".1">환영합니다<br>
-						빙고은행입니다</h1>
+						KOM은행입니다</h1>
 				</div>
 			</div>
 		</div>
@@ -177,9 +177,9 @@ End Fixed Navigation
         <div class="col-sm-3 col-md-3 col-lg-3">
           <ul>
             <li><h3>Our Services</h3></li>
-            <li><a href="banking.do">빙고은행</a></li>
-            <li><a href="404.jsp">성수증권</a></li>
-            <li><a href="404.jsp">예찬카드</a></li>
+            <li><a href="banking.do">KOM은행</a></li>
+            <li><a href="http://172.31.9.174:8080/KOMcard/home.do">KOM카드</a></li>
+            <li><a href="http://172.31.9.182:8080/Stock-System-WEB/getOneStock.do">KOM증권</a></li>
           </ul>
         </div>
         <!-- End of .col-sm-3 -->

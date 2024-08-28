@@ -5,8 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.ac.kopo.banking.dao.MemberDAO;
-import kr.ac.kopo.banking.vo.MemberVO;
 import kr.ac.kopo.framework.Controller;
+import kr.ac.kopo.util.RedisUtil;
+import kr.ac.kopo.vo.MemberVO;
 
 public class LogInController implements Controller{
 
@@ -43,6 +44,11 @@ public class LogInController implements Controller{
 			session.setAttribute("member", member);
 			
 			request.setAttribute("msg", msg);
+			
+			RedisUtil redisUtil = new RedisUtil("172.31.9.182", 6379);
+			
+			redisUtil.saveObject("loginUser", member);
+			
 			session.setAttribute("member", member);
 			
 		}
