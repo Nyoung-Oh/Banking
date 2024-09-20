@@ -1,3 +1,4 @@
+## Java를 이용한 은행 웹 서비스 (개인)
 <img src="https://github.com/user-attachments/assets/1608ca78-5ab7-4081-ba02-0beb2372d911"  width="1000" height="450">
 
 ### 🔎 소개 및 목적
@@ -13,11 +14,11 @@
 ### 🔎 프로그램 구조 MVC 패턴
 <img src="https://github.com/user-attachments/assets/3b24e2ad-9c5f-4793-9392-57ab91af16bc"  width="1000" height="500">
 
-## 📌 회고
+## 🔎 회고
 > - 프로젝트 초기 정확한 구조, 함수 이해 없이 진행하면서 개발 일정이 늦어졌습니다.
 > - 하지만 MVC 패턴과 Ajax, gson을 구현하며 앞서 배웠던 것을 총 복습할 수 있는 프로젝트였습니다.
 
-## 📌 주요 기능
+## 🔎 주요 기능
 ### ✔️ 계좌 개설
 #### ◻   자동 계좌 번호 생성
 #### ◻   비밀번호 더블 확인
