@@ -2,7 +2,7 @@
 
 # 📌 주요 기능
 ## ✔️ 계좌 개설
-### 자동 계좌 번호 생성(000000-00-000000)
+### 자동 계좌 번호 생성
 ### 비밀번호 더블 확인
 <img src="https://github.com/user-attachments/assets/23668f5f-c136-4047-b027-46656d40cc2c"  width="600" height="300">
 
